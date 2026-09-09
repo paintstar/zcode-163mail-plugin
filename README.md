@@ -53,7 +53,7 @@ python3 scripts/mail.py test
 
 ### 4️⃣ 安装到 ZCode
 
-- **插件方式（推荐）**：ZCode 设置 → 插件管理 → 发现 → 「+」→ 选择本仓库目录（本地目录形式的市场源），安装后重启会话。
+- **插件方式（推荐）**：ZCode 设置 → 插件管理 → 插件市场（发现）页 → **新建** → 选择本仓库目录（本仓库自带 `.zcode-plugin/marketplace.json`，会被识别为一个本地市场）→ 在列表中安装 **mail-163** → 重启会话。
 - **技能方式（轻量试用）**：把 `skills/mail` 复制到 `~/.zcode/skills/mail-163`，并把 SKILL.md 中的 `../../scripts/mail.py` 改成脚本绝对路径。
 
 装好后直接对 ZCode 说人话就行，比如：

@@ -1,0 +1,8 @@
+{
+  "name": "mail-163",
+  "version": "0.1.0",
+  "description": "163 邮箱插件：通过 IMAP/SMTP + 客户端授权码收取、搜索、阅读和发送网易 163 邮件。",
+  "homepage": "https://github.com/paintstar/zcode-163mail-plugin",
+  "license": "MIT",
+  "skills": "skills"
+}

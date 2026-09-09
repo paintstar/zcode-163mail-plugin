@@ -28,33 +28,42 @@
 2. 设置 → POP3/SMTP/IMAP → 开启「**IMAP/SMTP 服务**」（需手机短信验证）
 3. 生成 **16 位客户端授权码**并记下来——只显示一次
 
-### 2️⃣ 写入凭据
+### 2️⃣ 安装到 ZCode
+
+两种方式都已实测可用，任选其一：
+
+- **Git 地址（推荐，无需克隆）**：ZCode 设置 → 插件管理 → 插件市场（发现）页 → **新建** → 填入本仓库地址：
+
+  ```
+  https://github.com/paintstar/zcode-163mail-plugin.git
+  ```
+
+  在列表中安装 **mail-163**，重启会话即可。
+- **本地目录**：克隆本仓库后，插件市场 → 新建 → 选择克隆出的目录 → 安装。适合想改代码再装的情况。
+
+安装后插件标识为 `mail-163@zcode-163mail-plugin`。注意：市场安装的是缓存副本，仓库更新后需要在插件管理里更新/重装才会生效。
+
+> 只想轻量试用技能？把 `skills/mail` 复制到 `~/.zcode/skills/mail-163`，并把 SKILL.md 中的 `../../scripts/mail.py` 改成脚本绝对路径。
+
+### 3️⃣ 配置凭据
+
+装好插件后，最简单的方式是直接对 ZCode 说「**帮我配置 163 邮箱**」，它会用插件自带的脚本引导你完成。
+
+也可以手动配置：
 
 ```bash
 git clone https://github.com/paintstar/zcode-163mail-plugin.git
 cd zcode-163mail-plugin
 python3 scripts/mail.py setup   # 按提示输入邮箱地址与授权码（授权码不回显）
+python3 scripts/mail.py test    # 输出「连接成功：you@163.com」即配置完成
 ```
 
-凭据保存在 `~/.zcode/mail-plugin/config.json`（自动 chmod 600，已被 .gitignore 排除）。也可以不改文件，直接用环境变量：
+凭据保存在 `~/.zcode/mail-plugin/config.json`（自动 chmod 600，已被 .gitignore 排除）；也可以不改文件，直接用环境变量：
 
 ```bash
 export MAIL_163_USER=you@163.com
 export MAIL_163_AUTH_CODE=你的16位授权码
 ```
-
-### 3️⃣ 验证
-
-```bash
-python3 scripts/mail.py test
-```
-
-输出 `连接成功：you@163.com` 即可进入下一步。
-
-### 4️⃣ 安装到 ZCode
-
-- **插件方式（推荐）**：ZCode 设置 → 插件管理 → 插件市场（发现）页 → **新建** → 选择本仓库目录（本仓库自带 `.zcode-plugin/marketplace.json`，会被识别为一个本地市场）→ 在列表中安装 **mail-163** → 重启会话。
-- **技能方式（轻量试用）**：把 `skills/mail` 复制到 `~/.zcode/skills/mail-163`，并把 SKILL.md 中的 `../../scripts/mail.py` 改成脚本绝对路径。
 
 装好后直接对 ZCode 说人话就行，比如：
 

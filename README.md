@@ -14,7 +14,7 @@
 
 ## 快速开始
 
-环境要求：ZCode 客户端 + 一个 163 邮箱（系统有 `python3` 即可，macOS/Linux 一般自带）。
+环境要求：ZCode 客户端 + 一个 163 邮箱。**安装、配置、验证只用到系统自带的 bash，零额外依赖**；收信/发信等完整功能运行在 python3 上（零第三方包——macOS 首次使用会自动引导安装命令行工具，Linux 发行版一般自带）。
 
 只需两步：
 
@@ -51,9 +51,11 @@ https://github.com/paintstar/zcode-163mail-plugin.git
 ```bash
 git clone https://github.com/paintstar/zcode-163mail-plugin.git
 cd zcode-163mail-plugin
-python3 scripts/mail.py setup   # 按提示输入邮箱地址与授权码（授权码不回显）
-python3 scripts/mail.py test    # 输出「连接成功：you@163.com」即配置完成
+bash scripts/setup.sh    # 写入邮箱地址与授权码（纯 bash，授权码不回显）
+bash scripts/test.sh     # 验证 IMAP/SMTP 连接（bash + openssl，无需 Python）
 ```
+
+> 偏好 Python 或在 Windows 上：`python3 scripts/mail.py setup` 与 `python3 scripts/mail.py test` 效果相同。
 
 凭据保存在 `~/.zcode/mail-plugin/config.json`（自动 chmod 600，已被 .gitignore 排除）；也可以不改文件，直接用环境变量：
 
@@ -71,7 +73,14 @@ export MAIL_163_AUTH_CODE=你的16位授权码
 
 ## 命令行用法
 
-所有功能也可以脱离 ZCode 直接用：
+配置与验证（纯 bash，无需 Python）：
+
+```bash
+bash scripts/setup.sh
+bash scripts/test.sh
+```
+
+收信/搜索/读信/发件（需要 python3）：
 
 ```bash
 python3 scripts/mail.py test                          # 验证连接与授权
@@ -109,6 +118,9 @@ python3 scripts/mail.py send --to a@example.com --cc b@example.com \
 
 **登录失败？**
 ① 检查填的是 16 位授权码而非邮箱登录密码；② 确认网页版已开启 IMAP/SMTP 服务；③ 授权码重新生成后旧码立即作废。
+
+**提示找不到 python3？**
+macOS 终端输入 `python3` 会引导安装命令行工具（或 `brew install python3`）；Debian/Ubuntu 用 `sudo apt install python3`。配置与验证步骤不受影响（纯 bash）。
 
 **会报 `Unsafe Login` 吗？**
 网易要求客户端登录后、SELECT 之前发送 IMAP `ID` 命令声明身份，本插件已内置处理。如果你要改造脚本，请保留 `IMAP_ID_ARGS`。

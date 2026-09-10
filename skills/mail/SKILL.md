@@ -7,17 +7,29 @@ description: 操作用户的 163 邮箱（网易邮箱）：查收/列出/搜索
 
 ## 工具
 
-CLI 脚本位于本技能目录的 `../../scripts/mail.py`（即插件根目录的 `scripts/mail.py`，以 SKILL 加载时给出的 base directory 为准）。纯 Python 3 标准库，无第三方依赖。下文用 `$MAIL` 代指该脚本的绝对路径。
+脚本位于本技能目录的 `../../scripts/`（即插件根目录的 `scripts/`，以 SKILL 加载时给出的 base directory 为准）：
+
+- `setup.sh` — 写入凭据，纯 bash，零依赖
+- `test.sh` — 验证 IMAP/SMTP 连接与授权，bash + openssl（系统自带）
+- `mail.py` — 列邮件/搜索/读信/发件，纯 Python 3 标准库，无第三方依赖
+
+下文用 `$SCRIPTS` 代指该目录的绝对路径，`$MAIL` 代指 `$SCRIPTS/mail.py`。
 
 ## 凭据
 
-- 存放于 `~/.zcode/mail-plugin/config.json`（权限 600），由用户通过 `python3 $MAIL setup` 写入；也可用环境变量 `MAIL_163_USER` / `MAIL_163_AUTH_CODE` 覆盖。
-- 如果 `test` 报登录失败，引导用户：登录网页版 https://mail.163.com → 设置 → POP3/SMTP/IMAP → 开启 IMAP/SMTP 服务（需手机短信验证）→ 生成 16 位客户端授权码 → 重新 setup。授权码不是邮箱登录密码。
+- 存放于 `~/.zcode/mail-plugin/config.json`（权限 600），由用户通过 `bash $SCRIPTS/setup.sh` 写入（交互式，授权码不回显）；也可用环境变量 `MAIL_163_USER` / `MAIL_163_AUTH_CODE` 覆盖。
+- 验证连接优先用 `bash $SCRIPTS/test.sh`（同时验证 IMAP 登录与 SMTP 授权，无需 Python）；等价的 `python3 $MAIL test` 只验 IMAP。
+- 如果 test 报登录失败，引导用户：登录网页版 https://mail.163.com → 设置 → POP3/SMTP/IMAP → 开启 IMAP/SMTP 服务（需手机短信验证）→ 生成 16 位客户端授权码 → 重新 setup。授权码不是邮箱登录密码。
+- 若运行 `$MAIL` 时提示找不到 python3：引导安装（macOS `xcode-select --install` 或 `brew install python3`；Debian/Ubuntu `sudo apt install python3`）。配置与验证不受影响（纯 bash）。
 
 ## 命令速查
 
 ```bash
-# 验证连接与授权，看未读数
+# 配置凭据（纯 bash）与验证连接（bash + openssl，含 SMTP 授权检查）
+bash $SCRIPTS/setup.sh
+bash $SCRIPTS/test.sh
+
+# 验证连接与授权，看未读数（Python 版，只验 IMAP）
 python3 $MAIL test
 
 # 列出收件箱最近 20 封（新→旧，首列是 UID）
